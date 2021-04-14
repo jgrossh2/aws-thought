@@ -7,6 +7,7 @@ const awsConfig = {
 
 };
 AWS.config.update(awsConfig);
+// DocumentClient has only one version, no need to specify
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const table = "Thoughts";
 
@@ -38,7 +39,9 @@ router.get('/users/:username', (req, res) => {
     ExpressionAttributeValues: {
       ":user": req.params.username
     },
-    ProjectionExpression: "#th, #ca"
+    ProjectionExpression: "#th, #ca",
+    // default is true which mis order ascending, since we want most recent posts at top, switch to false for descending order
+    ScanIndexForward: false
   };
 
   dynamodb.query(params, (err, data) => {
@@ -47,10 +50,11 @@ router.get('/users/:username', (req, res) => {
       res.status(500).json(err); // an error occurred
     } else {
       console.log("Query succeeded.");
+      // data located in the Items property of response
       res.json(data.Items)
     }
   });
-});
+// }); closes the route for router.get(users/:username)
 
 // Create new user
 router.post('/users', (req, res) => {

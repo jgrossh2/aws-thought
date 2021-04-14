@@ -9,10 +9,12 @@ AWS.config.update({
 
 const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
+// schema does not need to be predefined like in a relational database
 const params = {
     TableName : "Thoughts",
     KeySchema: [       
         { AttributeName: "username", KeyType: "HASH"},  //Partition key
+        // will auto sort by most recent entry by using createdat as sort key
         { AttributeName: "createdAt", KeyType: "RANGE" }  //Sort key
     ],
     AttributeDefinitions: [       
