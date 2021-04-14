@@ -54,7 +54,8 @@ router.get('/users/:username', (req, res) => {
       res.json(data.Items)
     }
   });
-// }); closes the route for router.get(users/:username)
+  // closes the route for router.get(users/:username)
+}); 
 
 // Create new user
 router.post('/users', (req, res) => {
